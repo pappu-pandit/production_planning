@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Production planning</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap.min.css" >
+  <script src="https://code.jquery.com/jquery-3.5.1.js" ></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap.min.js" ></script>
+
+
+
+
+<script>
+$(document).ready(function() {
+  var data='';
+    $('#example').DataTable({
+	"lengthMenu": [[10, -1], [10, "All"]],
+     "ordering": false
+    });
+
+
+});
+
+</script>
+<script>
+
+    function search(ele){
+    if(event.key === 'Enter')
+     {
+       console.log(ele.value);
+
+     }}
+
+
+         var table=$('#example').DataTable();
+        $('#example tbody').on('click','tr',function(){
+         data=table.row(this).data();
+         console.log(data[0]);
+
+        });
+
+
+</script>
+
+
+
+
+
+</head>
+<body>
+<form action="" method="">
+
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Open</th>
+                <th>Plan</th>
+                <th>Prod</th>
+                <th>Total</th>
+                <th>Damage</th>
+                <th>Order</th>
+                <th>Variation</th>
+                <th>Closing</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Tiger Nixon</td>
+                <td>25</td>
+                <td>{{form.first}}</td>
+                <td>61</td>
+                <td>2011/04/25</td>
+                <td>$320,800</td>
+                  <td>61</td>
+                <td>2011/04/25</td>
+                <td>$320,800</td>
+
+            </tr>
+
+            <tr>
+                <td>Donna Snider</td>
+                <td>Customer Support</td>
+                <td>{{form.last}}</td>
+                <td>27</td>
+                <td>2011/01/25</td>
+                <td>$112,000</td>
+                  <td>61</td>
+                <td>2011/04/25</td>
+                <td>$320,800</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Item Name</th>
+                <th>Open</th>
+                <th>Plan</th>
+                <th>Prod</th>
+                <th>Total</th>
+                <th>Damage</th>
+                <th>Order</th>
+                <th>Variation</th>
+                <th>Closing</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <input type=submit value=submit>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+</head>
+<body>
+<!--
+<input type="text" placeholder="some text"  onkeydown="search(this)"/>
+<input type="text" placeholder="some text"  onkeydown="search(this)"/>
+-->
+
+<form action="" method="">
+    <table>
+
+ {{form.as_p}}
+
+    </table>
+
+<input type="submit" >
+
+</form>
+
+
+<script>
+function search(ele) {
+    if(event.key === 'Enter') {
+       console.log(ele.value)
+
+
+ $.ajax(
+    {
+        type:"GET",
+        url: "/test",
+        data:{
+                 post:ele.value
+        },
+        success: function( data )
+        {
+            console.log(data.message)
+            document.getElementById("id_first").style.backgroundColor = "red";
+
+
+        }
+     })
+
+    }
+}
+
+
+
+
+
+</script>
+
+</body>
+</html>
