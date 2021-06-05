@@ -1,0 +1,344 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1  shrink-to-fit=no"/>
+    <title>Production planning</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap.min.css" >
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.js" ></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap.min.js" ></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function() {
+  var data='';
+    $('#example').DataTable({
+	"lengthMenu": [[9, -1], [9, "All"]],
+       columnDefs: [
+
+    { orderable: false, targets: 1},
+    { orderable: false, targets: 2},
+    { orderable: false, targets: 3},
+    { orderable: false, targets: 4},
+    { orderable: false, targets: 5},
+    { orderable: false, targets: 6},
+    { orderable: false, targets: 7},
+    { orderable: false, targets: 9},
+
+
+  ],
+  order: [[8, 'desc'],[0,'asc']],
+
+
+    	"footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+
+            // converting to interger to find total
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            // computing column Total of the complete result
+            var opening = api
+                .column( 2 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+	    var production_plan = api
+                .column( 3 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+            var production_done = api
+                .column( 4 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+	     var total_production = api
+                .column( 5 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+	     var production_damage = api
+                .column( 6 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+        var order = api
+                .column( 7 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+       var variation = api
+                .column( 8 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+      var closing_bal = api
+                .column( 9 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+
+
+
+
+            // Update footer by showing the total with the reference of the column index
+            //console.log(monTotal,tueTotal,wedTotal,thuTotal,friTotal);
+	        $( api.column( 1 ).footer() ).html('Total');
+            $( api.column( 2 ).footer() ).html(opening);
+            $( api.column( 3 ).footer() ).html(production_plan);
+            $( api.column( 4 ).footer() ).html(production_done);
+            $( api.column( 5 ).footer() ).html(total_production);
+            $( api.column( 6 ).footer() ).html(production_damage);
+            $( api.column( 7 ).footer() ).html(order);
+            $( api.column( 8 ).footer() ).html(variation);
+            $( api.column( 9 ).footer() ).html(closing_bal);
+
+        }
+
+
+
+
+
+
+
+    });
+});
+
+</script>
+    <style>
+.mongg{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: absolute;
+    top: -33px;
+
+}
+
+    </style>
+
+</head>
+<body
+<div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-danger" style="background-color:palevioletred;" >
+
+     <a class="logo" href="#">
+          <img src="{% static 'img/logo.png' %}" class="mongg" >
+        </a>
+
+        <div class="container">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+  <a class="navbar-brand" style="color:	white;font-size:30px; font-style:normal"></a>
+
+
+
+
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+        <li><a href="{% url 'summary' %}" style="color:black;font-size:17px;">Production Summary</a></li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">Feeds <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'planning' %}">Production Planning</a></li>
+            <li><a href="{% url 'opening' %}">Opening Balance</a></li>
+            <li><a href="{% url 'produced' %}">Production</a></li>
+            <li><a href="{% url 'damage' %}">Damage</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'upload' %}">Sumo Upload</a></li>
+       <li role="separator" class="divider"></li>
+              <li><a href="{% url 'changes' %}">Changes</a></li>
+            <li role="separator" class="divider"></li>
+              <li><a href="{% url 'add_item' %}">Add item</a></li>
+          </ul>
+        </li>
+
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">Job Card <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'jobcard' 'line1' %}">Line 1</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'jobcard' 'line2' %}">Line 2</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'jobcard' 'line3' %}">Line 3</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'jobcard' 'line4' %}">Line 4</a></li>
+               <li role="separator" class="divider"></li>
+              <li><a href="{% url 'jobcard' 'line5' %}">Line 5</a></li>
+              <li role="separator" class="divider"></li>
+              <li ><a href="{% url 'jobcard' 'line6' %}">Line 6</a></li>
+                            <li role="separator" class="divider"></li>
+              <li ><a href="{% url 'jobcard' 'line7' %}">Line 7</a></li>
+                  <li role="separator" class="divider"></li>
+              <li ><a href="{% url 'jobcard' 'line7' %}">Line 8</a></li>
+                  <li role="separator" class="divider"></li>
+              <li ><a href="{% url 'jobcard' 'line9' %}">Line 9</a></li>
+          </ul>
+        </li>
+          <li>
+                 <a style="color:black;font-size:17px" onclick="exportToExcel('example',)" >Download</a>
+
+          </li>
+      </ul>
+        </ul>
+        <ul  class="nav navbar-nav navbar-right">
+            <li><a href="{% url 'logout' %}" style="color:darkred ; font-size:20px">Logout</a></li>
+        </ul>
+
+
+    </div><!-- /.navbar-collapse -->
+
+  </div><!-- /.container-fluid -->
+</nav>
+</div>
+
+<center>
+<div class="card" style=" width:400px;background-color:#00BFFF;color:black;font-size:17px;">
+    <center><p style="color:black">PRODUCTION SUMMARY</p></center>
+<form action="summary" method="POST" >
+ {% csrf_token %}
+
+    <center style="color:black;font-size:18px;" >{{form}}
+    <input type="submit" value="  Submit  "   >
+        <p style="color:black;font-size:18px;" >Date:{{date|date:'d-m-Y'}}</p>
+    </center>
+
+</form>
+    </div>
+    </center>
+<table id="example" class="table  table-bordered table-hover" style="width:100%; background-color:	#00BFFF; border:3px solid pink;">
+        <thead>
+            <tr>
+                <th style=" background-color:#005B8f; color:white ;font-size:16px;">Id</th>
+                <th style=" background-color:#005B8f; color:white;font-size:16px;">Item Name</th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;">Opening Balance</th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;">Production Planning</th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;">Production Done</th>
+                <th  style="text-align:center;background-color:#005B8f; color:white;font-size:16px;">Total Production</th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;">Production Damage</th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;">Order</th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;">Variation</th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;">Closing Balance</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+        {% if dit  %}
+        {% for i in dit %}
+
+
+            <tr>
+                  <td style=" color:white; background-color:green;font-size:16px;">{{i.id}}</td>
+                  <td style="color:white; background-color:green;font-size:16px;">{{i.itemname}}</td>
+                  <td style="text-align:center;font-size:19px;">{{i.op_qty}}</td>
+                  <td style="text-align:center;font-size:19px;">{{i.plan_qty}}</td>
+                  <td style="text-align:center;font-size:19px;">{{i.p_completed_qty}}</td>
+                  <td style="text-align:center;font-size:19px;">{{i.t_production}}</td>
+                  <td style="text-align:center;font-size:19px;">{{i.p_damage}}</td>
+                  <td style="text-align:center;font-size:19px;">{{i.p_order}}</td>
+                  <td style="text-align:center; background-color:orange;font-size:19px;">{{i.variation}}</td>
+                  <td style="text-align:center;font-size:19px;">{{i.closing_balance}}</td>
+
+            </tr>
+
+        {% endfor %}
+         {% endif %}
+
+
+        </tbody>
+	<tfoot >
+<tr>
+
+        <th style=" background-color:#005B8f; color:white ;font-size:16px;"></th>
+                <th style=" background-color:green; color:white;font-size:16px;"></th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;"></th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;"></th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;"></th>
+                <th  style="text-align:center;background-color:#005B8f; color:white;font-size:16px;"></th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;"></th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;"></th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;"></th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;"></th>
+        </tr>
+	</tfoot>
+    </table>
+
+
+</body>
+
+
+<script>
+function exportToExcel(tableID, filename = ''){
+    var downloadurl;
+    var dataFileType = 'application/vnd.ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTMLData = tableSelect.outerHTML.replace(/ /g, '%20');
+
+    // Specify file name
+    filename = filename?filename+'.xls':'export_excel_data.xls';
+
+    // Create download link element
+    downloadurl = document.createElement("a");
+
+    document.body.appendChild(downloadurl);
+
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTMLData], {
+            type: dataFileType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadurl.href = 'data:' + dataFileType + ', ' + tableHTMLData;
+
+        // Setting the file name
+        downloadurl.download = filename;
+
+        //triggering the function
+        downloadurl.click();
+    }
+}
+
+</script>
+
+</html>
