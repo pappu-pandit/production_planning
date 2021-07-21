@@ -1,0 +1,143 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1  shrink-to-fit=no"/>
+    <title>Production planning</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap.min.css" >
+  <script src="https://code.jquery.com/jquery-3.5.1.js" ></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap.min.js" ></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script>
+
+$(document).ready(function(){
+
+ // Show Input element
+ $('.edit').click(function(){
+  $('.txtedit').hide();
+  $(this).next('.txtedit').show().focus();
+  $(this).hide();
+ });
+
+ // Save data
+ $(".txtedit").focusout(function(){
+
+  // Get edit id, field name and value
+  var id = this.id;
+  var split_id = id.split("_");
+  var field_name = split_id[0];
+  var edit_id = split_id[1];
+  var value = $(this).val();
+
+  // Hide Input element
+  $(this).hide();
+
+  // Hide and Change Text of the container with input elmeent
+  $(this).prev('.edit').show();
+  $(this).prev('.edit').text(value);
+
+  // Sending AJAX request
+  $.ajax({
+   url: 'update.php',
+   type: 'post',
+   data: { field:field_name, value:value, id:edit_id },
+   success:function(response){
+      if(response == 1){
+         console.log('Save successfully');
+      }else{
+         console.log("Not saved.");
+      }
+   }
+  });
+
+ });
+
+});
+
+</script>
+<style>
+.edit{
+ width: 100%;
+ height: 25px;
+}
+.editMode{
+ border: 1px solid black;
+}
+
+/* Table Layout */
+table {
+ border:3px solid lavender;
+ border-radius:3px;
+}
+
+table tr:nth-child(1){
+ background-color:dodgerblue;
+}
+table tr:nth-child(1) th{
+ color:white;
+ padding:10px 0px;
+ letter-spacing: 1px;
+}
+
+/* Table rows and columns */
+table td{
+ padding:10px;
+}
+table tr:nth-child(even){
+ background-color:lavender;
+ color:black;
+}
+.txtedit{
+ display: none;
+ width: 99%;
+ height: 30px;
+}
+</style>
+
+</head>
+<body>
+<div class='container'>
+
+<table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+ <tr>
+  <th>S.no</th>
+  <th>Username</th>
+  <th>Name</th>
+ </tr>
+
+ <tr>
+  <td>1</td>
+  <td>
+    <div class='edit' >value</div>
+    <input type='text' class='txtedit' value='deepak' id=1 size="2">
+  </td>
+  <td>
+   <div class='edit' >value </div>
+   <input type='text' class='txtedit' value=pappu id=2 size="2">
+  </td>
+ </tr>
+     <tr>
+  <td>1</td>
+  <td>
+    <div class='edit' >value</div>
+    <input type='text' class='txtedit' value='deepak' id=1 size="2">
+  </td>
+  <td>
+   <div class='edit' >value </div>
+   <input type='text' class='txtedit' value=pappu id=2 size="2">
+  </td>
+ </tr>
+
+</table>
+</div>
+
+
+
+
+</body>
+</html>

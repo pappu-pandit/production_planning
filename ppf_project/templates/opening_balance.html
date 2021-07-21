@@ -1,0 +1,214 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1  shrink-to-fit=no"/>
+    <title>Production planning</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap.min.css" >
+  <script src="https://code.jquery.com/jquery-3.5.1.js" ></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap.min.js" ></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script>
+$(document).ready(function() {
+  var data='';
+    $('#example').DataTable({
+	"lengthMenu": [[10, -1], [10, "All"]],
+     "ordering": false,
+
+
+    	"footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+
+            // converting to interger to find total
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            // computing column Total of the complete result
+            var opening = api
+                .column( 3 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+            // Update footer by showing the total with the reference of the column index
+            //console.log(monTotal,tueTotal,wedTotal,thuTotal,friTotal);
+	        $( api.column( 1 ).footer() ).html('Total');
+
+            $( api.column( 3 ).footer() ).html(opening);
+
+        }
+
+
+
+
+
+    });
+});
+</script>
+    <style>
+.mongg{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: absolute;
+    top: -33px;
+
+}
+
+    </style>
+</head>
+<body>
+<div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-danger" style="background-color:palevioletred;" >
+     <a class="logo" href="#">
+          <img src="{% static 'img/logo.png' %}" class="mongg" >
+        </a>
+        <div class="container">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+  <a class="navbar-brand" style="color:	white;font-size:30px; font-style:normal"></a>
+
+
+
+
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+        <li><a href="{% url 'summary' %}" style="color:black;font-size:17px;">Production Summary</a></li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">Feeds <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'planning' %}">Production Planning</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'opening' %}">Opening Balance</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'produced' %}">Production</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'damage' %}">Damage</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'upload' %}">Sumo Upload</a></li>
+       <li role="separator" class="divider"></li>
+              <li><a href="{% url 'changes' %}">Changes</a></li>
+            <li role="separator" class="divider"></li>
+              <li><a href="{% url 'add_item' %}">Add item</a></li>
+          </ul>
+        </li>
+
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">Job Card <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'jobcard' 'line1' %}">Line 1</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'jobcard' 'line2' %}">Line 2</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'jobcard' 'line3' %}">Line 3</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'jobcard' 'line4' %}">Line 4</a></li>
+               <li role="separator" class="divider"></li>
+              <li><a href="{% url 'jobcard' 'line5' %}">Line 5</a></li>
+              <li role="separator" class="divider"></li>
+              <li ><a href="{% url 'jobcard' 'line6' %}">Line 6</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'jobcard' 'line7' %}">Line 7</a></li>
+               <li role="separator" class="divider"></li>
+              <li><a href="{% url 'jobcard' 'line8' %}">Line 8</a></li>
+              <li role="separator" class="divider"></li>
+              <li ><a href="{% url 'jobcard' 'line9' %}">Line 9</a></li>
+          </ul>
+        </li>
+             <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">MRP <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'store' %}">Store Planning</a></li>
+                  <li role="separator" class="divider"></li>
+            <li><a href="{% url 'sponge' %}">Sponge planning </a></li>
+                  <li role="separator" class="divider"></li>
+            <li><a href="{% url 'bms' %}">BMS Planning</a></li>
+          </ul>
+        </li>
+          <li>
+                 <a style="color:black;font-size:17px" onclick="exportToExcel('example',)" >Download</a>
+
+          </li>
+      </ul>
+        </ul>
+        <ul  class="nav navbar-nav navbar-right">
+            <li><a href="{% url 'logout' %}" style="color:darkred ; font-size:20px">Logout</a></li>
+        </ul>
+
+
+    </div><!-- /.navbar-collapse -->
+
+  </div><!-- /.container-fluid -->
+</nav>
+</div>
+<center><p style="color:black;font-size:18px;">OPENING BALANCE</p></center>
+
+<form action="opening" method="POST"  novalidate>
+ {% csrf_token %}
+<center>{{form}}
+            <p style="color:black;font-size:18px;" >Date:{{date|date:'d-m-Y'}}</p>
+    {% if messages %}
+{% for message in messages %}
+<p style="color:red;font-size:18px;" >{{message}}</p>
+{% endfor %}
+{% endif %}
+</center>
+<table id="example" class="table  table-bordered table-hover" style="width:100%; background-color:#00BFFF; border:3px solid pink;">
+        <thead>
+            <tr>
+                 <th style="text-align:center;background-color:#005B8f; color:white;font-size:20px;">ID</th>
+                <th style="background-color:#005B8f; color:white;font-size:20px;">Item Name</th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:20px;">Opening Balance</th>
+                 <th style="text-align:center;background-color:#005B8f; color:white;font-size:20px;">opening</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                 <td style="text-align:center; color:white; background-color:	green;font-size:18px;">{{item.item_master_align_id}}</td>
+                <td style=" color:white; background-color:	green;font-size:18px;">{{item.itemname}}</td>
+                <td style="text-align:center;"><input type="text" name="{{item.item_master_align_id}}" required id="kk" </td>
+
+                <td style="text-align:center;color:black;font-size:20px;">{{item.opening_balance}}</td>
+            </tr>
+         {% endfor %}
+        </tbody>
+    <tfoot>
+        <tr>
+                    <th style=" background-color:#005B8f; color:white ;font-size:16px;"></th>
+                <th style=" background-color:green; color:white;font-size:16px;"></th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;"></th>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:16px;"></th>
+        </tr>
+    </tfoot>
+
+    </table>
+
+   <center> <input type=submit value=submit>   </center>
+</form>
+
+</body>
+</html>

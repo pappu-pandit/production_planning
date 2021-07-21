@@ -1,0 +1,235 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1  shrink-to-fit=no"/>
+    <title>Production planning</title>
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap.min.css" >
+  <script src="https://code.jquery.com/jquery-3.5.1.js" ></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap.min.js" ></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<script>
+$(document).ready(function() {
+
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#example tbody").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+  });
+
+</script>
+    <style>
+.mongg{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: absolute;
+    top: -33px;
+
+}
+   .edit{
+ width: 100%;
+ height: 25px;
+}
+
+table td{
+ padding:10px;
+}
+table tr:nth-child(even){
+ background-color:lavender;
+ color:black;
+}
+.txtedit{
+ display: none;
+ width: 99%;
+ height: 30px;
+}
+    </style>
+</head>
+<body>
+
+<div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-danger" style="background-color:palevioletred;" >
+     <a class="logo" href="#">
+          <img src="{% static 'img/logo.png' %}" class="mongg" >
+        </a>
+        <div class="container">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+  <a class="navbar-brand" style="color:	white;font-size:30px; font-style:normal"></a>
+
+
+
+
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+        <li><a href="{% url 'summary' %}" style="color:black;font-size:17px;">Production Summary</a></li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">Feeds <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'planning' %}">Production Planning</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'opening' %}">Opening Balance</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'produced' %}">Production</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'damage' %}">Damage</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'upload' %}">Sumo Upload</a></li>
+       <li role="separator" class="divider"></li>
+              <li><a href="{% url 'changes' %}">Changes</a></li>
+            <li role="separator" class="divider"></li>
+              <li><a href="{% url 'add_item' %}">Add item</a></li>
+          </ul>
+        </li>
+
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">Job Card <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'jobcard' 'line1' %}">Line 1</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'jobcard' 'line2' %}">Line 2</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'jobcard' 'line3' %}">Line 3</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'jobcard' 'line4' %}">Line 4</a></li>
+               <li role="separator" class="divider"></li>
+              <li><a href="{% url 'jobcard' 'line5' %}">Line 5</a></li>
+              <li role="separator" class="divider"></li>
+              <li ><a href="{% url 'jobcard' 'line6' %}">Line 6</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'jobcard' 'line7' %}">Line 7</a></li>
+               <li role="separator" class="divider"></li>
+              <li><a href="{% url 'jobcard' 'line8' %}">Line 8</a></li>
+              <li role="separator" class="divider"></li>
+              <li ><a href="{% url 'jobcard' 'line9' %}">Line 9</a></li>
+          </ul>
+        </li>
+                    <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">MRP <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'store' %}">Store Planning</a></li>
+                  <li role="separator" class="divider"></li>
+            <li><a href="{% url 'sponge' %}">Sponge planning </a></li>
+                  <li role="separator" class="divider"></li>
+            <li><a href="{% url 'bms' %}">BMS Planning</a></li>
+          </ul>
+        </li>
+          <li>
+                 <a style="color:black;font-size:17px" onclick="exportToExcel('example',)" >Download</a>
+
+          </li>
+      </ul>
+        </ul>
+        <ul  class="nav navbar-nav navbar-right">
+            <li><a href="{% url 'logout' %}" style="color:darkred ; font-size:20px">Logout</a></li>
+        </ul>
+
+
+    </div><!-- /.navbar-collapse -->
+
+  </div><!-- /.container-fluid -->
+</nav>
+</div>
+
+
+
+
+
+<center><p style="color:black;font-size:18px;">Product Wise MRP Summary  &nbsp; date:{{date|date:'d-m-Y'}}</p>
+        <td style=" text-align:center;" >
+                      <input list="coupli" name="coupli" id="om">
+                      <datalist id="coupli">
+                    {% for lfd_item in lfd %}
+                <option >{{lfd_item.itemname}}</option>
+                      {% endfor %}
+                      </datalist>
+                     </td>
+  <button type="button"><a href="{% url 'store' %}">Submit</a></button>
+</center>
+
+<div class="container">
+    <input id="myInput" type="text" placeholder="Search..">
+<table id="example" class="table  " style="width:100%; border:3px solid pink;">
+
+{% for i in data %}
+    <tbody>
+            <tr>
+                <th style="text-align:center; background-color:green; color:white;font-size:18px;">Product Name</th>
+                <td style="font-size:18px;" >{{i.itemname}}</td>
+            </tr>
+            <tr>
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:18px;">Coupli/Board </th>
+                     <td>{{i.coupli}}</td>
+
+                <th style="text-align:center;background-color:#005B8f; color:white;font-size:18px;">Actual Qty  </th>
+                <td>{{i.store}}</td>
+                 <th style="text-align:center;background-color:#005B8f; color:white;font-size:18px;">Given Qty  </th>
+                <td>{{i.given_store}}</td>
+            </tr>
+<tr>
+ <th style="text-align:center;background-color:#005B8f; color:white;font-size:18px;">Sponge  </th>
+    <td style="font-size:16px;">Type:{{i.sponge_type}}   ---  Shape: {{i.sponge_shape}}  </td>
+        <th style="text-align:center;background-color:#005B8f; color:white;font-size:18px;">Actual Qty  </th>
+                <td>{{i.sponge}}</td>
+                 <th style="text-align:center;background-color:#005B8f; color:white;font-size:18px;">Given Qty  </th>
+                <td>{{i.given_sponge}}</td>
+
+            </tr>
+
+{% for lfd in i.lfd %}
+
+    <tr>
+ <th style="text-align:center;background-color:#005B8f; color:white;font-size:18px;" >Layer / Finish / Decor  </th>
+              <td>{{ lfd.0 }}</td>
+
+         <th style="text-align:center;background-color:#005B8f; color:white;font-size:18px;">Total Qty </th>
+              <td>{{ lfd.1 }}</td>
+
+          <th style="text-align:center;background-color:#005B8f; color:white;font-size:18px;">Given Qty </th>
+              <td>{{ lfd.2 }}</td>
+            </tr>
+
+    {% endfor %}
+    <tr>
+         <th style="text-align:center;background-color:silver; color:white;font-size:18px;"></th>
+        <td style="text-align:center;background-color:silver; color:white;font-size:18px;"></td>
+        <td style="text-align:center;background-color:silver; color:white;font-size:18px;"></td>
+        <td style="text-align:center;background-color:silver; color:white;font-size:18px;"></td>
+        <td style="text-align:center;background-color:silver; color:white;font-size:18px;"></td>
+        <td style="text-align:center;background-color:silver; color:white;font-size:18px;"></td>
+    </tr>
+</tbody>
+{% endfor %}
+
+    </table>
+</div>
+
+
+
+</body>
+</html>

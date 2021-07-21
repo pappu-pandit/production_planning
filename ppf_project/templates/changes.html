@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1  shrink-to-fit=no"/>
+    <title>Production planning</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap.min.css" >
+  <script src="https://code.jquery.com/jquery-3.5.1.js" ></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap.min.js" ></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+<div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-danger" style="background-color:palevioletred;" >
+     <a class="logo" href="#">
+          <img src="{% static 'img/logo.png' %}" class="mongg" >
+        </a>
+        <div class="container">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+  <a class="navbar-brand" style="color:	white;font-size:30px; font-style:normal"></a>
+
+
+
+
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+        <li><a href="{% url 'summary' %}" style="color:black;font-size:17px;">Production Summary</a></li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">Feeds <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'planning' %}">Production Planning</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'opening' %}">Opening Balance</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'produced' %}">Production</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'damage' %}">Damage</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'upload' %}">Sumo Upload</a></li>
+       <li role="separator" class="divider"></li>
+              <li><a href="{% url 'changes' %}">Changes</a></li>
+            <li role="separator" class="divider"></li>
+              <li><a href="{% url 'add_item' %}">Add item</a></li>
+          </ul>
+        </li>
+
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">Job Card <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'jobcard' 'line1' %}">Line 1</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'jobcard' 'line2' %}">Line 2</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'jobcard' 'line3' %}">Line 3</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="{% url 'jobcard' 'line4' %}">Line 4</a></li>
+               <li role="separator" class="divider"></li>
+              <li><a href="{% url 'jobcard' 'line5' %}">Line 5</a></li>
+              <li role="separator" class="divider"></li>
+              <li ><a href="{% url 'jobcard' 'line6' %}">Line 6</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{% url 'jobcard' 'line7' %}">Line 7</a></li>
+               <li role="separator" class="divider"></li>
+              <li><a href="{% url 'jobcard' 'line8' %}">Line 8</a></li>
+              <li role="separator" class="divider"></li>
+              <li ><a href="{% url 'jobcard' 'line9' %}">Line 9</a></li>
+          </ul>
+        </li>
+                    <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">MRP <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'store' %}">Store Planning</a></li>
+            <li><a href="{% url 'sponge' %}">Sponge planning </a></li>
+            <li><a href="{% url 'bms' %}">BMS Planning</a></li>
+          </ul>
+        </li>
+          <li>
+                 <a style="color:black;font-size:17px" onclick="exportToExcel('example',)" >Download</a>
+
+          </li>
+      </ul>
+        </ul>
+        <ul  class="nav navbar-nav navbar-right">
+            <li><a href="{% url 'logout' %}" style="color:darkred ; font-size:20px">Logout</a></li>
+        </ul>
+
+
+    </div><!-- /.navbar-collapse -->
+
+  </div><!-- /.container-fluid -->
+</nav>
+</div>
+
+<div>
+
+<center>
+   <div style="width:850px;height:100px;background color:blue">
+<div  class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Item Alignment and Status  changes</h3>
+  </div>
+  <div class="panel-body">
+
+<center>
+<div class="card">
+  <form action="changes" method="POST" novalidate >
+    {% csrf_token %}
+<p>Alignment changes</p>
+      {{ alignment.find.label_tag}}
+      {{ alignment.find }}
+
+      {{ alignment.replace.label_tag}}
+      {{ alignment.replace}}
+
+<br>
+      <br>
+<p>Status changes</p>
+          {{alignment.itemcode.label_tag}}
+        <input list="itemcode" name="itemcode">
+      <datalist id="itemcode">
+       {% for code in itemcode %}
+          <option value={{code.itemcode}}>
+              {% endfor %}
+
+      </datalist>
+
+      {{ alignment.status.label_tag}}
+      {{ alignment.status}}
+
+      {{ alignment.station_no.label_tag}}
+           <input list="station" name="station">
+      <datalist id="station">
+
+          <option value="Line1">
+          <option value="Line2">
+          <option value="Line3">
+          <option value="Line4">
+          <option value="Line5">
+          <option value="Line6">
+          <option value="Line7">
+
+
+      </datalist>
+
+<br><br>
+    <input type="submit" name="submit" value="Submit" />
+</form>
+
+</div>
+<br><br><br><br><br>
+<button type="button"  onclick="copy_item_master()"> Copy Item Master</button>
+
+</center>
+
+  </div>
+</div>
+</div>
+
+
+
+</div>
+
+</div>
+</center>
+
+<script>
+
+    function copy_item_master(){
+  console.log("deepak");
+    var token = '{{csrf_token}}';
+
+  $.ajax({
+   headers: { "X-CSRFToken": token },
+   type:'POST',
+  url:'{% url 'changes' %}',
+  data:{'userdata':'copy'},
+  success:function(data)
+  {
+  console.log("done")
+  }
+
+
+
+
+  })
+
+
+}
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,634 @@
+
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edhe">
+
+
+<link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
+<meta name="apple-mobile-web-app-title" content="CodePen">
+
+<link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
+
+<link rel="mask-icon" type="" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111" />
+
+    <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-8216c69d01441f36c0ea791ae2d4469f0f8ff5326f00ae2d00e4bb7d20e24edb.js"></script>
+
+<!--  <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.3/d3.min.js'></script> -->
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.js" ></script>
+        <!--
+          <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap.min.css" >
+  <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap.min.js" ></script>
+-->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<!--
+<link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.bootstrap4.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="https://cdn.datatables.net/fixedheader/3.1.8/js/dataTables.fixedHeader.min.js"></script>
+
+-->
+  <title>CodePen - D3 Gantt Chart</title>
+
+
+
+
+<style>
+
+    * {
+      margin: 0;
+      padding: 0;
+  }
+  body {
+      background: #fff;
+      font-family: 'Open-Sans',sans-serif;
+
+  }
+
+#container{
+  margin: 0 auto;
+  position: relative;
+  width:1250px;
+  overflow: visible;
+}
+
+
+  .svg {
+    width:1250px;
+    height:1000px;
+    overflow: visible;
+    position:absolute;
+}
+
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.3;
+    shape-rendering: crispEdges;
+}
+.grid path {
+      stroke-width: 0;
+}
+
+
+#tag {
+  color: white;
+  background: #FA283D;
+  width: 150px;
+  position: absolute;
+  display: none;
+  padding:3px 6px;
+  margin-left: -80px;
+  font-size: 11px;
+}
+
+
+
+#tag:before {
+  border: solid transparent;
+  content: ' ';
+  height: 0;
+  left: 50%;
+  margin-left: -5px;
+  position: absolute;
+  width: 0;
+  border-width: 10px;
+  border-bottom-color: #FA283D;
+  top: -20px;
+}
+
+    div.tooltip {
+              position: absolute;
+              text-align: center;
+              width: 50px;
+              height: 10px;
+              padding: 5px;
+              font: 10px sans-serif;
+              background: whiteSmoke;
+              border: solid 1px #aaa;
+              pointer-events: none;
+              box-shadow: 2px 2px 1px #888;
+            }
+
+
+
+
+</style>
+
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+  <script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+
+
+</head>
+
+<body translate="no" >
+<div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-danger" style="background-color:palevioletred;" >
+     <a class="logo" href="#">
+
+        </a>
+        <div class="container">
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+  <a class="navbar-brand" style="color:	white;font-size:30px; font-style:normal"></a>
+
+
+
+
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+        <li><a href="" style="color:black;font-size:17px;">Production Summary</a></li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">Feeds <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="">Production Planning</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="">Opening Balance</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href=">Production</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="">Damage</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="">Sumo Upload</a></li>
+       <li role="separator" class="divider"></li>
+              <li><a href="">Changes</a></li>
+            <li role="separator" class="divider"></li>
+              <li><a href="">Add item</a></li>
+          </ul>
+        </li>
+
+          <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">Job Card <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="">Line 1</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="">Line 2</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="">Line 3</a></li>
+               <li role="separator" class="divider"></li>
+            <li><a href="">Line 4</a></li>
+               <li role="separator" class="divider"></li>
+              <li><a href="">Line 5</a></li>
+              <li role="separator" class="divider"></li>
+              <li ><a href="">Line 6</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="">Line 7</a></li>
+               <li role="separator" class="divider"></li>
+              <li><a href="">Line 8</a></li>
+              <li role="separator" class="divider"></li>
+              <li ><a href="">Line 9</a></li>
+          </ul>
+        </li>
+                    <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">MRP <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Store Planning</a></li>
+            <li><a href="#">Sponge planning </a></li>
+            <li><a href="#">BMS Planning</a></li>
+          </ul>
+        </li>
+
+                              <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color:black;font-size:17px;">Gantt <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{% url 'gantt' 'Line1'  %}">Line1</a></li>
+            <li><a href="{% url 'gantt' 'Line2'  %}">Line2</a></li>
+            <li><a href="{% url 'gantt' 'Line3'  %}">Line3</a></li>
+              <li><a href="{% url 'gantt' 'Line4'  %}">Line4</a></li>
+            <li><a href="{% url 'gantt' 'Line5'  %}">Line5</a></li>
+            <li><a href="{% url 'gantt' 'Line6'  %}">Line6</a></li>
+              <li><a href="{% url 'gantt' 'Line7'  %}">Line7</a></li>
+            <li><a href="{% url 'gantt' 'Line8'  %}">Line8</a></li>
+            <li><a href="{% url 'gantt' 'Line9'  %}">Line9</a></li>
+
+          </ul>
+        </li>
+
+          <li>
+                 <a style="color:black;font-size:17px" onclick="exportToExcel('example',)" >Download</a>
+
+          </li>
+      </ul>
+        </ul>
+        <ul  class="nav navbar-nav navbar-right">
+            <li><a href="" style="color:darkred ; font-size:20px">Logout</a></li>
+        </ul>
+
+
+    </div><!-- /.navbar-collapse -->
+
+  </div><!-- /.container-fluid -->
+</nav>
+</div>
+
+<div>
+<center>
+<p >{{Line}}</p>
+    <h1 hidden>{{svg_hgt}}</h1>
+</center>
+<div class="card">
+  <div id = "container">
+<div class = "svg"></div>
+<div id = "tag"></div>
+
+</div>
+
+</div>
+</div>
+
+
+
+<script  >
+
+
+
+
+function callAjax() {
+var stn_line='';
+var tet =$('p').text();
+console.log(tet);
+if( tet == 'Line1'){stn_line='{% url 'gantt' 'Line1' %}';}
+ else if(tet=='Line2'){stn_line='{% url 'gantt' 'Line2' %}';}
+ else if(tet=='Line3'){stn_line='{% url 'gantt' 'Line3' %}';}
+ else if(tet=='Line4'){stn_line='{% url 'gantt' 'Line4' %}';}
+
+
+	$.ajax({
+    url: stn_line,
+	type: 'GET',
+    dataType: 'text',
+	data: {data:11},
+    success: function (data) {
+	console.log(data);
+d3.selectAll('svg').remove();
+
+    senddata(data);
+		 interval = setTimeout(callAjax, 10000);
+
+
+		 console.log("Hello world!");
+    },
+	error: function(xhr, status, error) {
+
+            alert("Status "+status);
+        },
+});
+}
+callAjax();
+</script>
+<script>
+function senddata(obj){
+var hg=$('h1').text();
+console.log(hg);
+var w = 1250;
+var h = hg;
+var data1
+
+var svg = d3.selectAll(".svg")
+//.selectAll("svg")
+.append("svg").
+attr("width", w).
+attr("height", h).
+attr("class", "svg");
+
+
+data1=JSON.parse(obj);
+//console.log(data1.length);
+var taskArray = data1;
+var len=taskArray.length;
+console.log(len);
+var stime=taskArray[0].startTime;
+var etime=taskArray[len-2].endTime;
+console.log(stime,etime);
+
+
+var dateFormat = d3.time.format("%H:%M");
+
+var timeScale = d3.time.scale().
+domain([d3.min(taskArray, function (d) {return dateFormat.parse(d.startTime);}),
+d3.max(taskArray, function (d) {return dateFormat.parse(d.endTime);})]).
+range([250, w - 250]);
+
+var categories = new Array();
+
+for (var i = 0; i < taskArray.length; i++) {if (window.CP.shouldStopExecution(0)) break;
+  categories.push(taskArray[i].type);
+}window.CP.exitedLoop(0);
+
+var catsUnfiltered = categories; //for vert labels
+
+categories = checkUnique(categories);
+
+
+makeGant(taskArray, w, h);
+
+var title = svg.append("text").
+text("Start:"+stime+" End:"+etime ).
+attr("x", w/2 ).
+attr("y", 25).
+attr("text-anchor", "middle").
+attr("font-size", 18).
+attr("fill", "#009FFC");
+
+//    "#7AC7C2", "#004751"
+
+function makeGant(tasks, pageWidth, pageHeight) {
+
+  var barHeight = 30;
+  var gap = barHeight + 1;
+  var topPadding = 50;
+  var sidePadding = 75;
+console.log("cat=",categories.length);
+  var colorScale = d3.scale.linear().
+
+  domain([0, categories.length]).
+  range(["#B666D2", "#7D0541"]).
+  interpolate(d3.interpolateHcl);
+
+  makeGrid(sidePadding, topPadding, pageWidth, pageHeight);
+  drawRects(tasks, gap, topPadding, sidePadding, barHeight, colorScale, pageWidth, pageHeight);
+  vertLabels(gap, topPadding, sidePadding, barHeight, colorScale);
+
+}
+
+
+function drawRects(theArray, theGap, theTopPad, theSidePad, theBarHeight, theColorScale, w, h) {
+
+  var bigRects = svg.append("g").
+  selectAll("rect").
+  data(theArray).
+  enter().
+  append("rect").
+  attr("x", 7).
+  attr("y", function (d, i) {
+    return i * theGap + theTopPad - 2;
+  }).
+  attr("width", function (d) {
+    return w - theSidePad / 2;
+  }).
+  attr("height", theGap).
+  attr("stroke", "none").
+  attr("fill", function (d) {
+    for (var i = 0; i < categories.length; i++) {if (window.CP.shouldStopExecution(1)) break;
+      if (d.type == categories[i]) {
+        return d3.rgb(theColorScale(i));
+      }
+    }window.CP.exitedLoop(1);
+  }).
+  attr("opacity", 0.5);
+
+
+  var rectangles = svg.append('g').
+  selectAll("rect").
+  data(theArray).
+  enter();
+
+
+  var innerRects = rectangles.append("rect").
+  attr("rx", 3).
+  attr("ry", 3).
+  attr("x", function (d) {
+    return timeScale(dateFormat.parse(d.startTime)) + theSidePad;
+  }).
+  attr("y", function (d, i) {
+    return i * theGap + theTopPad;
+  }).
+  attr("width", function (d) {
+    return timeScale(dateFormat.parse(d.endTime)) - timeScale(dateFormat.parse(d.startTime));
+  }).
+  attr("height", theBarHeight).
+  attr("stroke", "none").
+  attr("fill", function (d) {
+    for (var i = 0; i < categories.length; i++) {if (window.CP.shouldStopExecution(2)) break;
+      if (d.type == categories[i]) {
+        return d3.rgb(theColorScale(i));
+      }
+    }window.CP.exitedLoop(2);
+  });
+
+
+  var rectText = rectangles.append("text").
+  text(function (d) {
+    return d.task;
+  }).
+  attr("x", function (d) {
+    return (timeScale(dateFormat.parse(d.endTime)) - timeScale(dateFormat.parse(d.startTime))) / 1 + timeScale(dateFormat.parse(d.startTime)) + theSidePad;
+  }).
+  attr("y", function (d, i) {
+    return i * theGap + 14 + theTopPad;
+  }).
+  attr("font-size", 13).
+  attr("text-anchor", "start").
+  attr("text-height", theBarHeight).
+  attr("fill", "blue");
+
+
+  rectText.on('mouseover', function (e) {
+    // console.log(this.x.animVal.getItem(this));
+    var tag = "";
+
+    if (d3.select(this).data()[0].details != undefined) {
+      tag = "Task: " + d3.select(this).data()[0].task + "<br/>" +
+      "Type: " + d3.select(this).data()[0].type + "<br/>" +
+      "Starts: " + d3.select(this).data()[0].startTime + "<br/>" +
+      "Ends: " + d3.select(this).data()[0].endTime + "<br/>" +
+      "Details: " + d3.select(this).data()[0].details;
+    } else {
+      tag = "Task: " + d3.select(this).data()[0].task + "<br/>" +
+      "Type: " + d3.select(this).data()[0].type + "<br/>" +
+      "Starts: " + d3.select(this).data()[0].startTime + "<br/>" +
+      "Ends: " + d3.select(this).data()[0].endTime;
+    }
+    var output = document.getElementById("tag");
+
+    var x = this.x.animVal.getItem(this) + "px";
+    var y = this.y.animVal.getItem(this) + 25 + "px";
+
+    output.innerHTML = tag;
+    output.style.top = y;
+    output.style.left = x;
+    output.style.display = "block";
+  }).on('mouseout', function () {
+    var output = document.getElementById("tag");
+    output.style.display = "none";
+  });
+
+
+  innerRects.on('mouseover', function (e) {
+    //console.log(this);
+    var tag = "";
+
+    if (d3.select(this).data()[0].details != undefined) {
+      tag = "Task: " + d3.select(this).data()[0].task + "<br/>" +
+      "Type: " + d3.select(this).data()[0].type + "<br/>" +
+      "Starts: " + d3.select(this).data()[0].startTime + "<br/>" +
+      "Ends: " + d3.select(this).data()[0].endTime + "<br/>" +
+      "Details: " + d3.select(this).data()[0].details;
+    } else {
+      tag = "Task: " + d3.select(this).data()[0].task + "<br/>" +
+      "Type: " + d3.select(this).data()[0].type + "<br/>" +
+      "Starts: " + d3.select(this).data()[0].startTime + "<br/>" +
+      "Ends: " + d3.select(this).data()[0].endTime;
+    }
+    var output = document.getElementById("tag");
+
+    var x = this.x.animVal.value + this.width.animVal.value / 2 + "px";
+    var y = this.y.animVal.value + 25 + "px";
+
+    output.innerHTML = tag;
+    output.style.top = y;
+    output.style.left = x;
+    output.style.display = "block";
+  }).on('mouseout', function () {
+    var output = document.getElementById("tag");
+    output.style.display = "none";
+
+  });
+
+
+
+}
+
+
+function makeGrid(theSidePad, theTopPad, w, h) {
+
+  var xAxis = d3.svg.axis().
+  scale(timeScale).
+  orient('bottom').
+  ticks(d3.time.hours, 1).
+  tickSize(-h + theTopPad + 20, 0, 0).
+  tickFormat(dateFormat);
+
+
+
+
+  var grid = svg.append('g').
+  attr('class', 'grid').
+  attr('transform', 'translate(' + theSidePad + ', ' + (h - 50) + ')').
+  call(xAxis).
+  selectAll("text").
+  style("text-anchor", "middle").
+  attr("fill", "#000").
+  attr("stroke", "none").
+  attr("font-size", 12).
+  attr("dy", "1em");
+
+
+}
+
+function vertLabels(theGap, theTopPad, theSidePad, theBarHeight, theColorScale) {
+  var numOccurances = new Array();
+  var prevGap = 0;
+
+  for (var i = 0; i < categories.length; i++) {if (window.CP.shouldStopExecution(3)) break;
+    numOccurances[i] = [categories[i], getCount(categories[i], catsUnfiltered)];
+  }window.CP.exitedLoop(3);
+
+  var axisText = svg.append("g") //without doing this, impossible to put grid lines behind text
+  .selectAll("text").
+  data(numOccurances).
+  enter().
+  append("text").
+  text(function (d) {
+    return d[0];
+  }).
+  attr("x", 10).
+
+  attr("y", function (d, i) {
+    if (i > 0) {
+      for (var j = 0; j < i; j++) {if (window.CP.shouldStopExecution(4)) break;
+        prevGap += numOccurances[i - 1][1];
+        // console.log(prevGap);
+        return d[1] * theGap / 2 + prevGap * theGap + theTopPad;
+      }window.CP.exitedLoop(4);
+    } else {
+      return d[1] * theGap / 2 + theTopPad;
+    }
+  }).
+  attr("font-size", 15).
+  attr("text-anchor", "start").
+  attr("text-height", 20).
+  attr("fill", function (d) {
+    for (var i = 0; i < categories.length; i++) {if (window.CP.shouldStopExecution(5)) break;
+      if (d[0] == categories[i]) {
+        //  console.log("true!");
+        return d3.rgb("black");
+      }
+    }window.CP.exitedLoop(5);
+  });
+
+}
+
+//from this stackexchange question: http://stackoverflow.com/questions/1890203/unique-for-arrays-in-javascript
+function checkUnique(arr) {
+  var hash = {},result = [];
+  for (var i = 0, l = arr.length; i < l; ++i) {if (window.CP.shouldStopExecution(6)) break;
+    if (!hash.hasOwnProperty(arr[i])) {//it works with objects! in FF, at least
+      hash[arr[i]] = true;
+      result.push(arr[i]);
+    }
+  }window.CP.exitedLoop(6);
+  return result;
+}
+
+//from this stackexchange question: http://stackoverflow.com/questions/14227981/count-how-many-strings-in-an-array-have-duplicates-in-the-same-array
+function getCounts(arr) {
+  var i = arr.length, // var to loop over
+  obj = {}; // obj to store results
+  while (i) {if (window.CP.shouldStopExecution(7)) break;obj[arr[--i]] = (obj[arr[i]] || 0) + 1;} // count occurrences
+  window.CP.exitedLoop(7);return obj;
+}
+
+// get specific from everything
+function getCount(word, arr) {
+  return getCounts(arr)[word] || 0;
+}
+//# sourceURL=pen.js
+
+}
+
+
+</script>
+
+
+
+</body>
+
+</html>
+
